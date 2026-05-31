@@ -14,85 +14,90 @@
         }
         body {
             background-color: #ffffff;
-            padding: 20px;
+            padding: 20px; /* 页面整体内边距 */
         }
 
+        /* ========== 整体容器：页面居中、宽度固定 ========== */
         .container {
             width: 960px;
-            margin: 0 auto;
+            margin: 0 auto; /* 水平居中 */
             background: #fff;
             padding: 20px;
-            position: relative;
+            position: relative; /* 让内部绝对定位图片生效 */
         }
 
+        /* ========== 四张背景图位置（绝对定位） ========== */
         .img-top-right {
             position: absolute;
-            top: 20px;
-            right: 10px;
+            top: 20px;       /* 距离顶部20px */
+            right: 10px;     /* 距离右侧10px */
             width: 150px;
             height: auto;
             z-index: 1;
         }
         .img-top-left {
             position: absolute;
-            top: 0px;
-            left: 10px;
+            top: 0px;        /* 顶部对齐 */
+            left: 10px;      /* 左侧10px */
             width: 140px;
             height: auto;
             z-index: 1;
         }
         .img-bottom-right {
             position: absolute;
-            bottom: 0px;
-            right: 10px;
+            bottom: 0px;     /* 底部对齐 */
+            right: 10px;     /* 右侧10px */
             width: 170px;
             height: auto;
             z-index: 1;
         }
         .img-bottom-left {
             position: absolute;
-            bottom: 635px;
-            left: 540px;
+            bottom: 635px;   /* 距离底部635px（偏中上位置） */
+            left: 540px;     /* 左侧540px */
             width: 360px;
             height: auto;
             z-index: 1;
         }
         .img-bottom-left2 {
             position: absolute;
-            bottom: 240px;
-            left: 340px;
+            bottom: 240px;   /* 距离底部240px（中间偏下） */
+            left: 340px;     /* 左侧340px */
             width: 110px;
             height: auto;
             z-index: 1;
         }
 
+        /* ========== 标题区域：页面最上方居中 ========== */
         .header {
-            text-align: center;
-            margin-bottom: 20px;
+            text-align: center; /* 文字居中 */
+            margin-bottom: 20px; /* 下方留间距 */
         }
         .header h1 {
             color: #194b94;
-            font-size: 42px;
+            font-size: 42px; /* 大标题字号 */
         }
         .header p {
             color: #ff635;
             margin-top: 6px;
-            font-size: 16px;
+            font-size: 16px; /* 副标题小字 */
         }
 
+        /* ========== 左右双栏布局：中间有25px空隙 ========== */
         .two-col-layout {
-            display: flex;
-            gap: 25px;
+            display: flex;     /* 横向排列 */
+            gap: 25px;         /* 左右栏间距 */
         }
         .col-left, .col-right {
-            flex: 1;
+            flex: 1;           /* 左右宽度各占一半 */
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            flex-direction: column; /* 内部卡片纵向排列 */
+            gap: 20px;         /* 卡片之间间距 */
         }
 
+        /* ========== 卡片样式：所有模块的圆角边框 ========== */
         .card {
-            border-radius: 12px;
+            border-radius: 12px; /* 圆角 */
             padding: 10px;
             width: 100%;
             display: flex;
@@ -117,30 +122,33 @@
         .card h3 {
             margin-bottom: 10px;
             color: #9966cc;
-            font-size: 15px;
+            font-size: 15px; /* 卡片小标题 */
         }
 
+        /* ========== 表单行：标签+输入框 一行显示 ========== */
         .form-row {
             margin-bottom: 10px;
             font-size: 16px;
         }
         .form-row input {
-            width: 100%;
+            width: 100%;       /* 输入框铺满整行 */
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
             margin-top: 4px;
         }
 
+        /* ========== 评语下拉框：两个select横向排列 ========== */
         .comment-select-row{
             display:flex;
             gap:10px;
             margin-bottom:10px;
         }
         .comment-select-row select{
-            flex:1;
+            flex:1; /* 两个下拉框平分宽度 */
         }
 
+        /* ========== 能力表格：学习目标达成情况 ========== */
         .ability-table {
             width: 100%;
             border-collapse: collapse;
@@ -154,7 +162,7 @@
             border: 1px solid #86d17b;
             padding: 8px 6px;
             font-size: 13px;
-            text-align: center;
+            text-align: center; /* 表格文字居中 */
             background-color: #ffffff;
         }
         .ability-table th {
@@ -163,27 +171,29 @@
             font-weight: bold;
             font-size: 14px;
         }
+        /* 表格三列宽度比例 */
         .ability-table th:nth-child(1),.ability-table td:nth-child(1) {width: 35%;}
         .ability-table th:nth-child(2),.ability-table td:nth-child(2) {width: 45%;}
         .ability-table th:nth-child(3),.ability-table td:nth-child(3) {width: 20%;}
 
+        /* 导出时隐藏下拉框，显示纯文本 */
         .ability-text {display: none;}
         .ability-type-select {width: 100%;padding: 2px;border: 1px solid #ccc;border-radius: 3px;}
         .star-display {color: #ffcc00;font-size: 14px;}
         .star-input {width: 35px;text-align: center;border: 1px solid #ccc;border-radius: 3px;}
 
-        /* ========== 图片上传区域 ========== */
+        /* ========== 图片上传区域：居中显示上传按钮 ========== */
         .upload-area {
             flex: 1;
             position: relative;
             width: 100%;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: center;    /* 垂直居中 */
+            justify-content: center;/* 水平居中 */
             min-height: 200px;
             user-select: none;
         }
-        .upload-area input[type="file"] {display: none;}
+        .upload-area input[type="file"] {display: none;} /* 隐藏原生上传框 */
         .upload-btn {
             padding: 6px 12px;
             background: #4299e1;
@@ -193,38 +203,25 @@
             font-size: 14px;
             z-index: 2;
         }
+        /* 预览图居中、可缩放 */
         .upload-image {
             position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 85%;
+            left: 50%;top: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            max-width: 90%;max-height: 85%;
             object-fit: contain;
+            cursor: grab;
             display: none;
         }
 
-        /* ========== 缩放手柄 ========== */
-        .resize-handle {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background: #4299e1;
-            border-radius: 50%;
-            right: -8px;
-            bottom: -8px;
-            cursor: se-resize;
-            display: none;
-            z-index: 10;
-        }
-
+        /* ========== 进度条：课堂表现评估 ========== */
         .progress-row {
             display: flex;
-            align-items: center;
+            align-items: center; /* 一行对齐 */
             margin-bottom: 10px;
             font-size: 14px;
         }
-        .progress-row label {width: 120px;}
+        .progress-row label {width: 120px;} /* 标签固定宽度 */
         .progress-bar-container {
             flex: 1;
             height: 18px;
@@ -244,6 +241,7 @@
             display:none;
         }
 
+        /* 底部文字、按钮 */
         .full-card-wrap {margin-top: 25px;}
         .full-card {width: 100%;}
         .footer-text {text-align: center;margin-top: 20px;font-size: 14px;color: #4078c0;}
@@ -253,20 +251,28 @@
 </head>
 <body>
 
+<!-- ========== 整个页面容器：所有内容都在这里面 ========== -->
 <div class="container" id="report-container">
+
+    <!-- 5张背景图：固定在页面四角/中间 -->
     <img class="img-top-right" src="图片1.png" alt="右上">
     <img class="img-top-left" src="电脑.png" alt="左上">
     <img class="img-bottom-right" src="jq.png" alt="右下">
     <img class="img-bottom-left" src="jj.png" alt="左下">
     <img class="img-bottom-left2" src="xp.png" alt="左下2">
 
+    <!-- ========== 页面顶部：大标题 + 副标题 ========== -->
     <div class="header">
-        <h1>酷编程课堂记录与反馈</h1>
-        <p>记录成长每一步 · 见证进步每一天</p>
+        <h1>酷编程课堂记录与反馈</h1> <!-- 页面最上方大标题 -->
+        <p>记录成长每一步 · 见证进步每一天</p> <!-- 标题下方小字 -->
     </div>
 
+    <!-- ========== 左右双栏布局 ========== -->
     <div class="two-col-layout">
+
+        <!-- ========== 左侧栏（左半屏） ========== -->
         <div class="col-left">
+            <!-- ① 学生基本信息：左侧顶部蓝色卡片 -->
             <div class="card blue" style="height:300px">
                 <h3>① 学生基本信息</h3>
                 <div class="form-row"><label>学生姓名：</label><input type="text" id="stuName"></div>
@@ -275,6 +281,7 @@
                 <div class="form-row"><label>教师姓名：</label><input type="text" id="teaName"></div>
             </div>
 
+            <!-- ② 本节课学习内容：左侧第二个蓝色卡片 -->
             <div class="card blue" style="height:270px">
                 <h3>② 本节课学习内容</h3>
                 <div class="form-row"><label>搭建主题：</label><input type="text" id="buildTheme"></div>
@@ -282,6 +289,7 @@
                 <div class="form-row"><label>认知目标：</label><input type="text" id="cogTarget"></div>
             </div>
 
+            <!-- ③ 学习目标达成情况：左侧绿色表格 -->
             <div class="card green" style="height:360px">
                 <h3>③ 学习目标达成情况</h3>
                 <table class="ability-table">
@@ -290,23 +298,26 @@
                 </table>
             </div>
 
+            <!-- ④ 课堂练习得分：左侧最下方蓝色卡片 -->
             <div class="card blue" style="height:110px">
                 <h3>④ 课堂练习完成分数</h3>
                 <div class="form-row"><label>本节课得分：</label><input type="number" id="classScore" value="100" min="0" max="100"></div>
             </div>
         </div>
 
+        <!-- ========== 右侧栏（右半屏） ========== -->
         <div class="col-right">
+            <!-- ⑤ 专注学习瞬间：右侧顶部橙色卡片 -->
             <div class="card orange" style="height:460px">
                 <h3>⑤ 本节课专注学习瞬间</h3>
                 <div class="upload-area">
                     <input type="file" id="momentImg" accept="image/*">
                     <label class="upload-btn" for="momentImg">上传照片</label>
                     <img class="upload-image" id="momentPreview">
-                    <div class="resize-handle" id="handleMoment"></div>
                 </div>
             </div>
 
+            <!-- ⑥ 课堂表现评估：右侧紫色卡片 -->
             <div class="card purple" style="height:250px">
                 <h3>⑥ 课堂表现评估</h3>
                 <div class="progress-row">
@@ -335,18 +346,19 @@
                 </div>
             </div>
 
+            <!-- ⑦ 作品展示：右侧最下方橙色卡片 -->
             <div class="card orange" style="height:350px">
                 <h3>⑦ 作品展示</h3>
                 <div class="upload-area">
                     <input type="file" id="workImg" accept="image/*">
                     <label class="upload-btn" for="workImg">上传作品</label>
                     <img class="upload-image" id="workPreview">
-                    <div class="resize-handle" id="handleWork"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ========== 底部教师寄语：横跨整个页面宽度 ========== -->
     <div class="full-card-wrap">
         <div class="card purple full-card" style="height:160px">
             <h3>⑧ 教师寄语：</h3>
@@ -363,60 +375,48 @@
         </div>
     </div>
 
+    <!-- 页面最底部居中文字 -->
     <div class="footer-text">感谢信任支持，陪伴孩子快乐成长</div>
 </div>
 
+<!-- 页面最下方：两个按钮 -->
 <div class="btn-group">
     <button class="btn" onclick="generateReport()">生成图片报告</button>
     <button class="btn" onclick="clearAll()">清空表单</button>
 </div>
 
+<!-- JS脚本：功能实现（无位置变化） -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-// 图片拖拽缩放功能（点击显示蓝色小圆点，拖动缩放）
-function initResize(imgId, handleId) {
+// 图片缩放拖动功能
+function initImageResize(imgId) {
     const img = document.getElementById(imgId);
-    const handle = document.getElementById(handleId);
     let scale = 1;
-
-    // 点击图片显示缩放手柄
-    img.onclick = (e) => {
-        e.stopPropagation();
-        if (img.style.display === "block") {
-            handle.style.display = "block";
-        }
-    };
-
-    // 点击空白处隐藏手柄
-    document.addEventListener("click", (e) => {
-        if (!img.contains(e.target) && !handle.contains(e.target)) {
-            handle.style.display = "none";
-        }
-    });
-
-    // 拖动手柄缩放
-    handle.onmousedown = (e) => {
+    let startX, startY, startScale;
+    img.onwheel = (e) => {
         e.preventDefault();
-        const startX = e.clientX;
-        const startScale = scale;
-
+        scale = Math.max(0.2, Math.min(5, scale + (e.deltaY > 0 ? -0.05 : 0.05)));
+        img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    };
+    img.onmousedown = (e) => {
+        e.preventDefault();
+        startX = e.clientX; startY = e.clientY; startScale = scale;
         const onMove = (e) => {
-            const dx = e.clientX - startX;
-            scale = Math.max(0.2, Math.min(5, startScale + dx * 0.01));
+            const dx = e.clientX - startX; const dy = e.clientY - startY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            scale = Math.max(0.2, Math.min(5, startScale + dist * 0.005));
             img.style.transform = `translate(-50%, -50%) scale(${scale})`;
         };
-
         const onUp = () => {
             document.removeEventListener("mousemove", onMove);
             document.removeEventListener("mouseup", onUp);
         };
-
         document.addEventListener("mousemove", onMove);
         document.addEventListener("mouseup", onUp);
     };
 }
 
-// 评语库
+// 评语库（纯文本数据）
 const commentLib = {
     excellent: [
         "上课专注投入，理解能力出众，课堂任务总能高效完成。",
@@ -461,7 +461,7 @@ const commentLib = {
     ]
 };
 
-// 能力列表
+// 能力列表（下拉框数据）
 let abilityList = ["编程能力","分析能力","整合能力","独立解决问题能力","逻辑思维能力","想象力和创造力","专注力","语言表达能力","记忆力理解力","抗挫能力","耐心细心"];
 const abilityDesc = {
      "编程能力": "可以根据编程题目的要求，通过编程进行解题",
@@ -477,6 +477,7 @@ const abilityDesc = {
         "耐心细心": "完成过程耐心坚持，会检查自己的代码避免有错漏"
 };
 
+// 下拉框联动
 let typeSel = document.getElementById("commentType");
 let listSel = document.getElementById("commentList");
 let msgArea = document.getElementById("teacherMsg");
@@ -488,6 +489,7 @@ typeSel.onchange = function(){
 };
 listSel.onchange = function(){if(this.value)msgArea.value=this.value;};
 
+// 渲染能力下拉框
 function renderSelect(selectEl){
     selectEl.innerHTML = "";
     abilityList.forEach(item => {
@@ -502,6 +504,7 @@ function renderSelect(selectEl){
     selectEl.appendChild(addOpt);
 }
 
+// 生成5行能力表格
 const tableBody = document.getElementById("abilityTable");
 for(let i=0;i<5;i++){
     let tr=document.createElement("tr");
@@ -518,6 +521,7 @@ for(let i=0;i<5;i++){
     renderSelect(document.getElementById(`abilitySelect${i}`));
 }
 
+// 新建能力功能
 document.querySelectorAll(".ability-type-select").forEach((s,i)=>{
     s.onchange=()=>{
         let v=s.value;
@@ -537,15 +541,30 @@ document.querySelectorAll(".ability-type-select").forEach((s,i)=>{
     };
 });
 
-document.querySelectorAll(".star-input").forEach((inp,idx)=>{
-    function up(){
-        let n=Math.max(1,Math.min(5,parseInt(inp.value)||1));
-        inp.value=n;
-        document.getElementById(`starText${idx}`).innerText="★".repeat(n)+"☆".repeat(5-n);
-    }
-    inp.oninput=up;up();
+// 星级显示
+document.querySelectorAll(".star-input").forEach((inp, idx) => {
+    // 只在输入完成、离开框子时才更新，不实时强制改写
+    inp.onblur = function () {
+        let val = this.value.trim();
+
+        // 为空 → 设为 1
+        if (val === '') {
+            this.value = 1;
+        } else {
+            let num = parseInt(val, 10);
+            // 不是数字 或 <1 或 >5 → 都设为 1
+            if (isNaN(num) || num < 1 || num > 5) {
+                this.value = 1;
+            }
+        }
+
+        // 统一用 this.value 来显示星星
+        let num = parseInt(this.value, 10);
+        document.getElementById(`starText${idx}`).innerText = "★".repeat(num) + "☆".repeat(5 - num);
+    };
 });
 
+// 进度条联动
 function bindPro(inpId,barId){
     let inp=document.getElementById(inpId),bar=document.getElementById(barId);
     let txtSpan = document.querySelector(`.txt-percent[data-for="${inpId}"]`);
@@ -596,8 +615,6 @@ function clearAll(){
     });
     document.getElementById("momentPreview").style.display="none";
     document.getElementById("workPreview").style.display="none";
-    document.getElementById("handleMoment").style.display = "none";
-    document.getElementById("handleWork").style.display = "none";
     document.querySelectorAll(".ability-type-select").forEach((s,i)=>{
         s.selectedIndex=0;
         document.getElementById(`abilityText${i}`).innerText="编程能力";
@@ -610,7 +627,7 @@ function clearAll(){
     typeSel.selectedIndex=0;listSel.innerHTML='<option value="">先选择等级</option>';
 }
 
-// 生成报告
+// 生成报告图片
 async function generateReport(){
     const commentBox = document.getElementById("commentSelectBox");
     const scoreInput = document.getElementById("classScore");
@@ -628,7 +645,6 @@ async function generateReport(){
     abilityTexts.forEach(el=>el.style.display="inline");
     percentInputs.forEach(el=>el.style.display="none");
     percentTexts.forEach(el=>el.style.display="inline-block");
-    document.querySelectorAll(".resize-handle").forEach(h => h.style.display = "none");
 
     const container = document.getElementById('report-container');
     const canvas = await html2canvas(container, { scale:2, useCORS:true, logging:false });
@@ -645,12 +661,13 @@ async function generateReport(){
     abilityTexts.forEach(el=>el.style.display="none");
     percentInputs.forEach(el=>el.style.display="");
     percentTexts.forEach(el=>el.style.display="none");
+
     alert('报告生成成功！');
 }
 
-// 初始化缩放功能
-initResize("momentPreview", "handleMoment");
-initResize("workPreview", "handleWork");
+// 初始化图片缩放
+initImageResize("momentPreview");
+initImageResize("workPreview");
 </script>
 </body>
 </html>
