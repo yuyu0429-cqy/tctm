@@ -2,8 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>酷编程课堂记录与反馈</title>
+    <!-- 裁剪库CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -97,6 +101,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         .card.blue {
             background-color: #f0f5ff;
@@ -172,15 +177,35 @@
         .star-display {color: #ffcc00;font-size: 14px;}
         .star-input {width: 35px;text-align: center;border: 1px solid #ccc;border-radius: 3px;}
 
+        .upload-wrap {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap:8px;
+        }
+        .upload-btn-row {
+            display: flex;
+            gap:10px;
+        }
+        .crop-switch-btn {
+            padding: 6px 12px;
+            background:#ff8833;
+            color:#fff;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+        }
         .upload-area {
             flex: 1;
             position: relative;
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             min-height: 200px;
             user-select: none;
+            overflow: hidden;
+            border:1px dashed #ccc;
+            display:flex;
+            align-items:center;
+            justify-content:center;
         }
         .upload-area input[type="file"] {display: none;}
         .upload-btn {
@@ -200,6 +225,22 @@
             object-fit: contain;
             cursor: grab;
             display: none;
+            touch-action: none;
+        }
+        /* 裁剪容器 */
+        .crop-container {
+            width:100%;
+            height:100%;
+            display:none;
+            position:absolute;
+            left:0;top:0;
+            background:#000000cc;
+            z-index:99;
+        }
+        .crop-inner {
+            width:95%;
+            height:95%;
+            margin:auto;
         }
 
         .progress-row {
@@ -234,16 +275,23 @@
         .btn-group {text-align: center;margin-top: 25px;}
         .btn {padding: 8px 18px;background-color: #367be8;color: #fff;border: none;border-radius: 4px;cursor: pointer;margin: 0 6px;}
 
-        /* 评语显示专用DIV（截图时显示） */
+        /* 修复教师寄语显示 */
         #teacherMsgDisplay {
             display: none;
             width: 100%;
             padding: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            word-break: break-all;
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+            line-height: 1.5 !important;
+            min-height: 60px !important;
+            height: auto !important;
+            font-size: 14px !important;
+            color: #333 !important;
+            overflow: visible !important;
+        }
+        #teacherMsg {
             line-height: 1.5;
-            min-height: 60px;
         }
     </style>
 </head>
@@ -293,12 +341,20 @@
         </div>
 
         <div class="col-right">
-            <div class="card orange" style="height:460px">
+            <div class="card orange" style="height:460px" id="momentCard">
                 <h3>⑤ 本节课专注学习瞬间</h3>
-                <div class="upload-area">
-                    <input type="file" id="momentImg" accept="image/*">
-                    <label class="upload-btn" for="momentImg">上传照片</label>
-                    <img class="upload-image" id="momentPreview">
+                <div class="upload-wrap">
+                    <div class="upload-btn-row">
+                        <label class="upload-btn" for="momentImg">上传照片</label>
+                        <button class="crop-switch-btn" data-target="momentPreview">框选截图</button>
+                    </div>
+                    <div class="upload-area">
+                        <input type="file" id="momentImg" accept="image/*">
+                        <img class="upload-image" id="momentPreview">
+                        <div class="crop-container" data-crop="moment">
+                            <div class="crop-inner"><img id="cropImgMoment"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -330,12 +386,20 @@
                 </div>
             </div>
 
-            <div class="card orange" style="height:350px">
+            <div class="card orange" style="height:350px" id="workCard">
                 <h3>⑦ 作品展示</h3>
-                <div class="upload-area">
-                    <input type="file" id="workImg" accept="image/*">
-                    <label class="upload-btn" for="workImg">上传作品</label>
-                    <img class="upload-image" id="workPreview">
+                <div class="upload-wrap">
+                    <div class="upload-btn-row">
+                        <label class="upload-btn" for="workImg">上传作品</label>
+                        <button class="crop-switch-btn" data-target="workPreview">框选截图</button>
+                    </div>
+                    <div class="upload-area">
+                        <input type="file" id="workImg" accept="image/*">
+                        <img class="upload-image" id="workPreview">
+                        <div class="crop-container" data-crop="work">
+                            <div class="crop-inner"><img id="cropImgWork"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -354,7 +418,6 @@
                 <select id="commentList"><option value="">先选择等级</option></select>
             </div>
 
-            <!-- 输入框 -->
             <textarea id="teacherMsg"
             style="width:100%;border:1px solid #ccc;border-radius:4px;padding:5px;
             resize:vertical;
@@ -364,7 +427,6 @@
             word-break:break-all;
             "></textarea>
 
-            <!-- 截图时显示全部评语（自动换行） -->
             <div id="teacherMsgDisplay"></div>
         </div>
     </div>
@@ -377,34 +439,98 @@
     <button class="btn" onclick="clearAll()">清空表单</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-function initImageResize(imgId) {
+// 裁剪全局实例
+let cropperIns = null;
+let currentPreviewId = "";
+let currentCropBox = null;
+let originImgSrc = "";
+
+// 普通图片双指缩放浏览初始化
+function initImageScale(imgId) {
     const img = document.getElementById(imgId);
     let scale = 1;
-    let startX, startY, startScale;
+    let touchStartDist = 0;
+
+    function updateTransform() {
+        img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
+    // 滚轮缩放
     img.onwheel = (e) => {
         e.preventDefault();
         scale = Math.max(0.2, Math.min(5, scale + (e.deltaY > 0 ? -0.05 : 0.05)));
-        img.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        updateTransform();
     };
-    img.onmousedown = (e) => {
+    // 手机双指缩放
+    img.addEventListener('touchstart', e => {
+        if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            touchStartDist = Math.hypot(dx, dy);
+        }
+    });
+    img.addEventListener('touchmove', e => {
         e.preventDefault();
-        startX = e.clientX; startY = e.clientY; startScale = scale;
-        const onMove = (e) => {
-            const dx = e.clientX - startX; const dy = e.clientY - startY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            scale = Math.max(0.2, Math.min(5, startScale + dist * 0.005));
-            img.style.transform = `translate(-50%, -50%) scale(${scale})`;
-        };
-        const onUp = () => {
-            document.removeEventListener("mousemove", onMove);
-            document.removeEventListener("mouseup", onUp);
-        };
-        document.addEventListener("mousemove", onMove);
-        document.addEventListener("mouseup", onUp);
-    };
+        if (e.touches.length === 2 && touchStartDist) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.hypot(dx, dy);
+            scale = Math.max(0.2, Math.min(5, scale * (dist / touchStartDist)));
+            touchStartDist = dist;
+            updateTransform();
+        }
+    });
 }
+
+// 开启裁剪模式
+document.querySelectorAll('.crop-switch-btn').forEach(btn=>{
+    btn.onclick = function(e){
+        e.stopPropagation();
+        currentPreviewId = this.dataset.target;
+        const previewImg = document.getElementById(currentPreviewId);
+        if(!previewImg.src || previewImg.style.display === "none"){
+            alert("请先上传图片！");
+            return;
+        }
+        originImgSrc = previewImg.src;
+        // 区分两个裁剪容器
+        const cropBoxId = currentPreviewId === "momentPreview" ? "cropImgMoment" : "cropImgWork";
+        currentCropBox = this.closest(".upload-wrap").querySelector(".crop-container");
+        const cropImgDom = document.getElementById(cropBoxId);
+        cropImgDom.src = originImgSrc;
+        currentCropBox.style.display = "block";
+        // 销毁旧裁剪实例
+        if(cropperIns) cropperIns.destroy();
+        cropperIns = new Cropper(cropImgDom, {
+            viewMode:1,
+            dragMode:"move",
+            autoCropArea:0.8,
+            responsive:true,
+            restore:false,
+            checkOrientation:false,
+            cropBoxMovable:true,
+            cropBoxResizable:true,
+            toggleDragModeOnDblclick:true
+        });
+    }
+});
+
+// 点击空白区域确认裁剪并退出裁剪模式
+document.querySelectorAll('.crop-container').forEach(box=>{
+    box.onclick = function(e){
+        if(e.target !== this) return;
+        if(!cropperIns) return;
+        // 获取裁剪后的图片
+        const canvas = cropperIns.getCroppedCanvas({maxWidth:1920});
+        const previewDom = document.getElementById(currentPreviewId);
+        previewDom.src = canvas.toDataURL("image/png");
+        previewDom.style.display = "block";
+        // 关闭裁剪层
+        this.style.display = "none";
+        cropperIns.destroy();
+        cropperIns = null;
+    }
+});
 
 const commentLib = {
     excellent: [
@@ -566,6 +692,7 @@ bindPro("bkPercent","bkBar");
 bindPro("buildPercent","buildBar");
 bindPro("codePercent","codeBar");
 
+// 图片上传预览
 document.getElementById("momentImg").onchange = e => {
     let f = e.target.files[0]; if (!f) return;
     let r = new FileReader();
@@ -601,6 +728,14 @@ function clearAll(){
     });
     document.getElementById("momentPreview").style.display="none";
     document.getElementById("workPreview").style.display="none";
+    // 关闭裁剪层
+    document.querySelectorAll(".crop-container").forEach(box=>{
+        box.style.display="none";
+    });
+    if(cropperIns){
+        cropperIns.destroy();
+        cropperIns=null;
+    }
     document.querySelectorAll(".ability-type-select").forEach((s,i)=>{
         s.selectedIndex=0;
         document.getElementById(`abilityText${i}`).innerText="编程能力";
@@ -613,7 +748,7 @@ function clearAll(){
     typeSel.selectedIndex=0;listSel.innerHTML='<option value="">先选择等级</option>';
 }
 
-// 生成报告（已修复评语自动换行+全部显示）
+// 修复教师寄语超长截断问题：自动计算容器完整高度渲染
 async function generateReport(){
     const commentBox = document.getElementById("commentSelectBox");
     const scoreInput = document.getElementById("classScore");
@@ -626,6 +761,8 @@ async function generateReport(){
     commentBox.style.display = "none";
     msgArea.style.display = "none";
     msgDisplay.style.display = "block";
+    // 强制撑开评语区域高度
+    msgDisplay.style.height = "auto";
     scoreInput.style.border = "none";
     scoreInput.style.background = "transparent";
     starInputs.forEach(el=>el.style.display="none");
@@ -635,12 +772,21 @@ async function generateReport(){
     percentTexts.forEach(el=>el.style.display="inline-block");
 
     const container = document.getElementById('report-container');
-    const canvas = await html2canvas(container, { scale:2, useCORS:true, logging:false });
+    // 关键修复：读取完整滚动高度，避免底部/长文本被截断
+    const fullHeight = Math.max(container.offsetHeight, container.scrollHeight);
+    const canvas = await html2canvas(container, {
+        scale:2,
+        useCORS:true,
+        logging:false,
+        windowHeight: fullHeight,
+        height: fullHeight
+    });
     const link = document.createElement('a');
     link.download = '课堂记录反馈.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
 
+    // 恢复界面
     commentBox.style.display = "flex";
     msgArea.style.display = "block";
     msgDisplay.style.display = "none";
@@ -655,8 +801,9 @@ async function generateReport(){
     alert('报告生成成功！');
 }
 
-initImageResize("momentPreview");
-initImageResize("workPreview");
+// 初始化图片浏览缩放
+initImageScale("momentPreview");
+initImageScale("workPreview");
 </script>
 </body>
 </html>
