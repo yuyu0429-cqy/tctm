@@ -218,19 +218,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: #f9f9f9;
         }
         .upload-area input[type="file"] {display: none;}
 
-        .upload-image {
-            position: absolute;
-            left: 0;
-            top: 0;
+        .img-wrapper {
             width: 100%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-image {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             cursor: grab;
-            display: none;
-            transform: scale(1);
             transform-origin: center center;
         }
 
@@ -244,14 +248,12 @@
             background:rgba(0,0,0,0.8);
             z-index:9999;
         }
-        /* 裁剪内部容器 */
         .crop-inner {
             width:95%;
             height:95%;
             margin: auto;
             position:relative;
         }
-        /* 兜底关闭按钮 */
         .crop-close-tip {
             position:absolute;
             top:10px;
@@ -364,7 +366,8 @@
         </div>
 
         <div class="col-right">
-            <div class="card orange" style="height:460px" id="momentCard">
+            <!-- 行内固定背景色 #fff8e6 -->
+            <div class="card orange" style="height:460px;background-color:#fff8e6;border:2px solid #ffb347" id="momentCard">
                 <h3>⑤ 本节课专注学习瞬间</h3>
                 <div class="upload-wrap">
                     <div class="upload-btn-row">
@@ -372,9 +375,11 @@
                         <button class="crop-switch-btn" data-target="momentPreview" data-input="momentImg">框选截图</button>
                         <button class="del-img-btn" data-target="momentPreview" data-input="momentImg">删除照片</button>
                     </div>
-                    <div class="upload-area">
+                    <div class="upload-area" data-card-bg="#fff8e6">
                         <input type="file" id="momentImg" accept="image/*">
-                        <img class="upload-image" id="momentPreview">
+                        <div class="img-wrapper">
+                            <img class="upload-image" id="momentPreview">
+                        </div>
                         <div class="crop-container" data-crop="moment">
                             <div class="crop-inner">
                                 <div class="crop-close-tip">点击灰色未选中区域完成裁剪并关闭</div>
@@ -413,7 +418,8 @@
                 </div>
             </div>
 
-            <div class="card orange" style="height:350px" id="workCard">
+            <!-- 行内固定背景色 #fff8e6 -->
+            <div class="card orange" style="height:350px;background-color:#fff8e6;border:2px solid #ffb347" id="workCard">
                 <h3>⑦ 作品展示</h3>
                 <div class="upload-wrap">
                     <div class="upload-btn-row">
@@ -421,9 +427,11 @@
                         <button class="crop-switch-btn" data-target="workPreview" data-input="workImg">框选截图</button>
                         <button class="del-img-btn" data-target="workPreview" data-input="workImg">删除照片</button>
                     </div>
-                    <div class="upload-area">
+                    <div class="upload-area" data-card-bg="#fff8e6">
                         <input type="file" id="workImg" accept="image/*">
-                        <img class="upload-image" id="workPreview">
+                        <div class="img-wrapper">
+                            <img class="upload-image" id="workPreview">
+                        </div>
                         <div class="crop-container" data-crop="work">
                             <div class="crop-inner">
                                 <div class="crop-close-tip">点击灰色未选中区域完成裁剪并关闭</div>
@@ -711,7 +719,7 @@ let msgDisplay = document.getElementById("teacherMsgDisplay");
 
 typeSel.onchange = function(){
     let k = this.value;
-    listSel.innerHTML = '<option value="">请选择等级</option>';
+    listSel.innerHTML = '<option value="">先选择等级</option>';
     if(!k)return;
     commentLib[k].forEach(t=>{let o=document.createElement("option");o.value=t;o.innerText=t;listSel.appendChild(o);});
 };
@@ -809,7 +817,6 @@ function clearAll(){
     document.querySelectorAll(".crop-container").forEach(c=>c.style.display="none");
     if(cropperIns){cropperIns.destroy();cropperIns=null;}
 
-    // 清空两张图片+对应文件输入框
     resetSingleImage("momentPreview", "momentImg");
     resetSingleImage("workPreview", "workImg");
 
@@ -846,7 +853,6 @@ async function generateReport(){
     const abilitySelects = document.querySelectorAll(".ability-type-select");
     const abilityTexts = document.querySelectorAll(".ability-text");
 
-    // 生成报告时隐藏删除按钮
     document.querySelectorAll(".del-img-btn").forEach(btn=>btn.style.display="none");
     document.querySelectorAll(".upload-btn-row").forEach(el=>el.style.display="none");
 
@@ -869,14 +875,22 @@ async function generateReport(){
         useCORS:true,
         logging:false,
         windowHeight: fullHeight,
-        height: fullHeight
+        height: fullHeight,
+        onclone: function(clonedDoc) {
+            // 读取自定义属性色值，强制覆盖背景，百分百生效
+            const uploadAreas = clonedDoc.querySelectorAll('.upload-area');
+            uploadAreas.forEach(area => {
+                const bgColor = area.dataset.cardBg;
+                area.style.backgroundColor = bgColor;
+            })
+        }
     });
     const link = document.createElement('a');
     link.download = '课堂记录反馈.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
 
-    // 恢复显示
+    // 恢复界面
     document.querySelectorAll(".del-img-btn").forEach(btn=>btn.style.display="");
     document.querySelectorAll(".upload-btn-row").forEach(el=>el.style.display="flex");
 
